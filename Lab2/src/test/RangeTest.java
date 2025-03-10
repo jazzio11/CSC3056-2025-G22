@@ -8,7 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class rangeTest {
+public class RangeTest {
 	@Before
 	public void setUp() throws Exception {
 	}

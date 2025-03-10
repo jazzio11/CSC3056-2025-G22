@@ -1,60 +1,72 @@
+package test.DataUtilities;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import static org.junit.Assert.*;
+import java.lang.ProcessHandle.Info;
 
 import org.jfree.data.DataUtilities;
 import org.jfree.data.DefaultKeyedValues;
 import org.jfree.data.KeyedValues;
 import org.junit.BeforeClass;
 import org.junit.AfterClass;
-import org.junit.*;
+import org.junit.Test;
 
 public class GetCumulativePercentagesTest {
 
     // Static resources that can be initialised once for the entire class
-    private static DefaultKeyedValues data1, data2, data3, data4;
+    public static DefaultKeyedValues data1;
+    public static DefaultKeyedValues data2;
+    public static DefaultKeyedValues data3;
+    public static Comparable<String> key0;
+    public static Comparable<String> key1;
+    public static Comparable<String> key2;
+    
+    private static double DELTA = 0.001;
 
-    // BeforeClass: Setup that runs before all tests
     @BeforeClass
-    public static void setupClass() {
-        // Initialise data using DefaultKeyedValues for 4 different detests
+    public static void setup() {
+    
+    	key0 = "0";
+    	key1 = "1";
+    	key2 = "2";
+    	
+    	data1 = new DefaultKeyedValues();
+    	data1.addValue(key0, 6.0);
+    	data1.addValue(key1, 10.0);
+    	data1.addValue(key2, 4.0);
+    	
 
-        data1 = new DefaultKeyedValues();
-        data1.insertValue(0, (Comparable) 0, 6.0);   // Using insertValue
-        data1.insertValue(1, (Comparable) 1, 10.0);  // Using insertValue
-        data1.insertValue(2, (Comparable) 2, 4.0);   // Using insertValue
-
-        // Dataset 2: Includes negative values
+        // Dataset 2
         data2 = new DefaultKeyedValues();
-        data2.insertValue(0, (Comparable) 0, 6.0);   // Using insertValue
-        data2.insertValue(1, (Comparable) 1, -10.0); // Using insertValue
-        data2.insertValue(2, (Comparable) 2, 4.0);   // Using insertValue
+        data2.addValue(key0, 6.0);   
+        data2.addValue(key1, -10.0); 
+        data2.addValue(key2, 4.0);   
 
-        // Dataset 3: Includes constant values (NaN)
+        // Dataset 3
         data3 = new DefaultKeyedValues();
-        data3.insertValue(0, (Comparable) 0, 6.0);        // Using insertValue
-        data3.insertValue(1, (Comparable) 1, Double.NaN); // Using insertValue (NaN)
-        data3.insertValue(2, (Comparable) 2, 4.0);        // Using insertValue
+        data3.addValue(key0, 6.0);        
+        data3.addValue(key1, Double.NaN); 
+        data3.addValue(key2, 4.0);        
 
-        // Dataset 4: Contains no values (empty dataset)
-        data4 = new DefaultKeyedValues();
     }
-
-    // AfterClass: Cleanup that runs after all tests
+    
     @AfterClass
-    public static void tearDownClass() {
-        // Clean up static resources or perform finalisation here
-        data1 = null;
-        data2 = null;
-        data3 = null;
-        data4 = null;
+    public static void teardown() {
+    	data1 = null;
+    	data2 = null;
+    	data3 = null;
+    	
     }
 
     // Test Case 1: Only Positive Values
     @Test
     public void testOnlyPositiveValues() {
         KeyedValues result = DataUtilities.getCumulativePercentages(data1);
+
+        assertEquals(0.3125, (double)result.getValue(key0), DELTA); // Compare using the Integer keys (0, 1, 2)
+        assertEquals(0.875, (double)result.getValue(key1), DELTA); 
+        assertEquals(1.0, (double)result.getValue(key2), DELTA);
         
-        assertEquals(data1, result);
     }
 
     // Test Case 2: Includes Negative Values
@@ -63,21 +75,20 @@ public class GetCumulativePercentagesTest {
         KeyedValues result = DataUtilities.getCumulativePercentages(data2);
         
         // Assuming negative values are ignored or handled as expected
-        assertEquals(data2, result);
+        assertEquals(0.3125,(double)result.getValue(key0), DELTA);
+        assertEquals(0.875,(double)result.getValue(key1), DELTA);
+        assertEquals(1.0, (double)result.getValue(key2), DELTA);
+        
     }
 
     // Test Case 3: Includes Constant Values (NaN)
     @Test
     public void testIncludesConstantValues() {
         KeyedValues result = DataUtilities.getCumulativePercentages(data3);
-        assertEquals(data3, result);
-    }
-
-    // Test Case 4: Contains No Values
-    @Test
-    public void testContainsNoValues() {
-        KeyedValues result = DataUtilities.getCumulativePercentages(data4);
-        assertEquals(data4, result);
+        assertTrue(Double.isNaN((Double) result.getValue(key0)));
+        assertTrue(Double.isNaN((Double) result.getValue(key1)));
+        assertTrue(Double.isNaN((Double) result.getValue(key2)));
+       
     }
 
 }

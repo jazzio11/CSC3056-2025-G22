@@ -8,7 +8,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class calculateRowTotalTest {
+public class CalculateRowTotalTest {
 	
     private static DefaultKeyedValues2D validData;
     private static DefaultKeyedValues2D validData2;
@@ -58,7 +58,7 @@ public class calculateRowTotalTest {
     }
 
     @Test
-    public void testCalculateRowTotal_ValidData_RowNegative() {
+    public void testCalculateRowTotalValidDataRowNegative() {
         // Test Case #1: Negative row index should throw an IndexOutOfBoundsException
     	assertThrows(IndexOutOfBoundsException.class, () -> {
     		DataUtilities.calculateRowTotal(validData, -40);
@@ -66,14 +66,14 @@ public class calculateRowTotalTest {
     }
 
     @Test
-    public void testCalculateRowTotal_ValidData_Row1() {
+    public void testCalculateRowTotalValidDataRow1() {
         // Test Case #2: Row 1 should return the sum of values, '5' and '-6'
         double result = DataUtilities.calculateRowTotal(validData, 1);
         assertEquals("Expected -1.0 for row index 1", 8.0, result, 0.0);
     }
 
     @Test
-    public void testCalculateRowTotal_ValidData_RowOutOfBounds() {
+    public void testCalculateRowTotalValidDataRowOutOfBounds() {
         // Test Case #3
         assertThrows(IndexOutOfBoundsException.class, () -> {
     		DataUtilities.calculateRowTotal(validData, 3);
@@ -81,7 +81,7 @@ public class calculateRowTotalTest {
     }
 
     @Test
-    public void testCalculateRowTotal_NullData_RowNegative() {
+    public void testCalculateRowTotalNullDataRowNegative() {
         // Test Case #4: 
     	try {
     		assertThrows(IllegalArgumentException.class, () -> {
@@ -93,7 +93,7 @@ public class calculateRowTotalTest {
     }
 
     @Test
-    public void testCalculateRowTotal_NullData_Row1() {
+    public void testCalculateRowTotalNullDataRow1() {
         // Test Case #5: 
     	try {
     		assertThrows(IllegalArgumentException.class, () -> {
@@ -105,7 +105,7 @@ public class calculateRowTotalTest {
     }
 
     @Test
-    public void testCalculateRowTotal_NullData_Row3() {
+    public void testCalculateRowTotalNullDataRow3() {
         // Test Case #6:
     	try {
     		assertThrows(IllegalArgumentException.class, () -> {
@@ -117,28 +117,28 @@ public class calculateRowTotalTest {
     }
 
     @Test
-    public void testCalculateRowTotal_ValidData2_Row0() {
+    public void testCalculateRowTotalValidData2Row0() {
         // Test Case #11: Row 0 of validData2 should sum to 1053.14
         double result = DataUtilities.calculateRowTotal(validData2, 0);
         assertEquals("Expected 1053.14 for row index 0 in validData2", 1053.14, result, 0.0);
     }
 
     @Test
-    public void testCalculateRowTotal_ValidData3_Row1() {
+    public void testCalculateRowTotalValidData3Row1() {
         // Test Case #14: Row 1 of validData3 should sum to -4.0 (2.0 - 6.0)
         double result = DataUtilities.calculateRowTotal(validData3, 1);
         assertEquals("Expected -4.0 for row index 1 in validData3", -4.0, result, 0.0);
     }
 
     @Test
-    public void testCalculateRowTotal_ValidData4_Row1() {
+    public void testCalculateRowTotalValidData4Row1() {
         // Test Case #17: Row 1 of validData4 should return NaN due to NaN value in the row
         double result = DataUtilities.calculateRowTotal(validData4, 1);
         assertTrue("Expected NaN for row index 1 in validData4", Double.isNaN(result));
     }
     
     @Test
-    public void testCalculateRowTotal_ValidData4_RowOutOfBounds() {
+    public void testCalculateRowTotalValidData4RowOutOfBounds() {
         // Test Case #17: Row 1 of validData4 should return NaN due to NaN value in the row
         assertThrows(IndexOutOfBoundsException.class, () -> {
     		DataUtilities.calculateRowTotal(validData4, 3);

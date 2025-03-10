@@ -6,7 +6,7 @@ import org.jfree.data.DataUtilities;
 import org.jfree.data.DefaultKeyedValues2D;
 import org.junit.*;
 
-public class calculcateColumnTotalTest {
+public class CalculcateColumnTotalTest {
 
     private static DefaultKeyedValues2D validData;
     private static DefaultKeyedValues2D validData2;
@@ -57,13 +57,13 @@ public class calculcateColumnTotalTest {
     
     //ValidData test cases
     @Test(expected = IndexOutOfBoundsException.class)
-    public void testCalculateColumnTotal_ValidData_ColumnNegative() {
+    public void testCalculateColumnTotalValidDataColumnNegative() {
         // Test Case #1
         double result = DataUtilities.calculateColumnTotal(validData, -40);
     }
 
     @Test
-    public void testCalculateColumnTotal_ValidData_Column1() {
+    public void testCalculateColumnTotalValidDataColumn1() {
         // Test Case #2
         double result = DataUtilities.calculateColumnTotal(validData, 1);
         assertEquals("Expected -1.0 for column 1, where values sum to 5 + (-6) = -1.0",-1.0, result, 0.0); 
@@ -78,7 +78,7 @@ public class calculcateColumnTotalTest {
     
 
     @Test
-    public void testCalculateColumnTotal_NullData_Column0() {
+    public void testCalculateColumnTotalNullDataColumn0() {
     	// Test Case #4
     	assertThrows(IllegalArgumentException.class, () -> {
     		DataUtilities.calculateColumnTotal(nullData, 0);
@@ -86,7 +86,7 @@ public class calculcateColumnTotalTest {
     }
 
     @Test
-    public void testCalculateColumnTotal_NullData_Column1() {
+    public void testCalculateColumnTotalNullDataColumn1() {
     	// Test Case #5
     	try {
     		assertThrows(IllegalArgumentException.class, () -> {
@@ -98,7 +98,7 @@ public class calculcateColumnTotalTest {
     }
 
     @Test
-    public void testCalculateColumnTotal_NullData_Column3() {
+    public void testCalculateColumnTotalNullDataColumn3() {
         // Test Case #6
     	assertThrows(IllegalArgumentException.class, () -> {
     		DataUtilities.calculateColumnTotal(nullData, 3);
@@ -106,21 +106,21 @@ public class calculcateColumnTotalTest {
     }
 
     @Test
-    public void testCalculateColumnTotal_ValidData2_Column0() {
+    public void testCalculateColumnTotalValidData2Column0() {
         // Test Case #7
         double result = DataUtilities.calculateColumnTotal(validData2, 0);
         assertEquals("Expected 44.0 for column 0 in validData2, where values sum to 50 + (-6) = 44.0",44.0, result, 0.0);
     }
 
     @Test
-    public void testCalculateColumnTotal_ValidData3_Column2() {
+    public void testCalculateColumnTotalValidData3Column2() {
         // Test Case #8
         double result = DataUtilities.calculateColumnTotal(validData3, 2);
         assertEquals("Expected 9.0 for column 2 in validData3, with a missing value skipped",9.0, result, 0.0); 
     }
 
     @Test
-    public void testCalculateColumnTotal_ValidData3_Column3() {
+    public void testCalculateColumnTotalValidData3Column3() {
         // Test Case #9
     	try {
         double result = DataUtilities.calculateColumnTotal(validData3, 3);
@@ -133,7 +133,7 @@ public class calculcateColumnTotalTest {
     }
 
     @Test
-    public void testCalculateColumnTotal_ValidData4_Column1() {
+    public void testCalculateColumnTotalValidData4Column1() {
         // Test Case #10
         Double result = DataUtilities.calculateColumnTotal(validData4, 1);
         assertTrue("Expected NaN for column 1 in validData4 due to Double.NaN value",result.isNaN()); 
