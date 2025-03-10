@@ -8,14 +8,14 @@ import org.junit.*;
 
 public class calculcateColumnTotalTest {
 
-    private DefaultKeyedValues2D validData;
-    private DefaultKeyedValues2D validData2;
-    private DefaultKeyedValues2D validData3;
-    private DefaultKeyedValues2D validData4;
-    private DefaultKeyedValues2D nullData;
+    private static DefaultKeyedValues2D validData;
+    private static DefaultKeyedValues2D validData2;
+    private static DefaultKeyedValues2D validData3;
+    private static DefaultKeyedValues2D validData4;
+    private static DefaultKeyedValues2D nullData;
 
-    @Before
-    public void setUp() {
+    @BeforeClass
+    public static void setUp() {
         // Initialise validData
         validData = new DefaultKeyedValues2D();
         validData.addValue(1.0, 0, 0);
@@ -56,11 +56,10 @@ public class calculcateColumnTotalTest {
     
     
     //ValidData test cases
-    @Test
+    @Test(expected = IndexOutOfBoundsException.class)
     public void testCalculateColumnTotal_ValidData_ColumnNegative() {
         // Test Case #1
         double result = DataUtilities.calculateColumnTotal(validData, -40);
-        assertEquals("Expected 0.0 for invalid column index -40", 0.0, result, 0.0); 
     }
 
     @Test
@@ -70,17 +69,10 @@ public class calculcateColumnTotalTest {
         assertEquals("Expected -1.0 for column 1, where values sum to 5 + (-6) = -1.0",-1.0, result, 0.0); 
     }
 
-    @Test
+    @Test(expected = IndexOutOfBoundsException.class)
     public void testCalculateColumnTotal_ValidData_ColumnOutBoundPositive() {
         // Test Case #3
-        try {
-            double result = DataUtilities.calculateColumnTotal(validData, 3);
-            // Check that the result is 0.0 for the out-of-bounds column index
-            assertEquals("Expected 0.0 for invalid column index 3", 0.0, result, 0.0);
-        } catch (Exception e) {
-            // If NullPointerException occurs, we want the test to pass as it's expected for this test to handle null gracefully
-            System.out.println(e.getMessage()+" : This is expected if validData is not properly initialized." + validData.getValue(0, 0));
-        }
+        double result = DataUtilities.calculateColumnTotal(validData, 1);
     }
     
     
@@ -96,9 +88,13 @@ public class calculcateColumnTotalTest {
     @Test
     public void testCalculateColumnTotal_NullData_Column1() {
     	// Test Case #5
-    	assertThrows(IllegalArgumentException.class, () -> {
-    		DataUtilities.calculateColumnTotal(nullData, 1);
-        });
+    	try {
+    		assertThrows(IllegalArgumentException.class, () -> {
+        		DataUtilities.calculateColumnTotal(nullData, 0);
+            });
+    	} catch (Exception e) {
+    		fail(); 
+    	}
     }
 
     @Test
@@ -126,9 +122,14 @@ public class calculcateColumnTotalTest {
     @Test
     public void testCalculateColumnTotal_ValidData3_Column3() {
         // Test Case #9
+    	try {
         double result = DataUtilities.calculateColumnTotal(validData3, 3);
         System.out.print(result);
         assertEquals("Expected 0.0 for invalid column index 3 in validData3",0.0, result, 0.0); 
+        
+    	} catch (Exception e) {
+    		fail(e.getClass().getSimpleName());
+    	}
     }
 
     @Test
@@ -138,14 +139,13 @@ public class calculcateColumnTotalTest {
         assertTrue("Expected NaN for column 1 in validData4 due to Double.NaN value",result.isNaN()); 
     }
     
-    @After
-    public void tearDown() {
+    @AfterClass
+    public static void tearDown() {
         validData = null;
         validData2 = null;
         validData3 = null;
         validData4 = null;
         System.out.println("Test case completed, cleanup performed.");
     }
-
 }
 
