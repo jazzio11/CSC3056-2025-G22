@@ -42,7 +42,7 @@ public class rangeTest {
 	public void testCombineTwoValidInputs() {
 		Range range1 = new Range(1,10);
 		Range range2 = new Range(11,20);
-		Range result = Range.combine(range1, range2);
+		Range result = Range.combine(range2, range1);
 		assertEquals(new Range(1,20), result);
 	}
 	
@@ -69,6 +69,15 @@ public class rangeTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void testCombineOneInvalidOneNull() {		
 		Range.combine(new Range(10,1), null);
+	}
+	
+	@Test
+	public void testCombineNegativePositiveRanges() {
+		Range range1 = new Range(-5,5);
+		Range range2 = new Range(5,10);
+		Range expected = new Range(-5,10);
+		Range result = Range.combine(range2, range1);
+		assertEquals("Error combining positive and negative ranges", expected, result);
 	}
 	
 	@Test
