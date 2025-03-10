@@ -4,9 +4,7 @@ import static org.junit.Assert.*;
 
 import org.jfree.data.DataUtilities;
 import org.jfree.data.DefaultKeyedValues2D;
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
