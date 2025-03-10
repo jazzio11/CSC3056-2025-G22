@@ -1,6 +1,7 @@
 package test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import org.jfree.data.Range;
 import org.junit.After;
@@ -40,10 +41,15 @@ public class rangeTest {
 	
 	@Test
 	public void testCombineTwoValidInputs() {
-		Range range1 = new Range(1,10);
-		Range range2 = new Range(11,20);
-		Range result = Range.combine(range1, range2);
-		assertEquals(new Range(1,20), result);
+		try {
+			Range range1 = new Range(1,10);
+			Range range2 = new Range(11,20);
+			Range result = Range.combine(range1, range2);
+			assertEquals(new Range(1,20), result);
+		}catch(IllegalArgumentException ex) {
+			fail("Failure when attempting to combine two ranges");
+		}
+		
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
@@ -69,6 +75,15 @@ public class rangeTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void testCombineOneInvalidOneNull() {		
 		Range.combine(new Range(10,1), null);
+	}
+	
+	@Test
+	public void testCombineNegativePositiveRanges() {
+		Range range1 = new Range(-5,5);
+		Range range2 = new Range(5,10);
+		Range expected = new Range(-5,10);
+		Range result = Range.combine(range2, range1);
+		assertEquals("Error combining positive and negative ranges", expected, result);
 	}
 	
 	@Test
