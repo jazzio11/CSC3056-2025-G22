@@ -26,14 +26,16 @@ public class rangeTest {
 	
 	@Test
 	public void testCombineOneNullOneValid() {
-		Range result = Range.combine(new Range(1,10), null);
-		assertEquals(null, result);
+		Range result = Range.combine(null, new Range(1,10));
+		Range expected = new Range(1,10);
+		assertEquals(expected, result);
 	}
 	
 	@Test
 	public void testCombineOneValidOneNull() {
-		Range result = Range.combine(null, new Range(1,10));
-		assertEquals(null, result);
+		Range result = Range.combine(new Range(1,10), null);
+		Range expected = new Range(1,10);
+		assertEquals(expected, result);		
 	}
 	
 	@Test
