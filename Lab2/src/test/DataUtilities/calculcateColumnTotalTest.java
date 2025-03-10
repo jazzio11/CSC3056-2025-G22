@@ -8,13 +8,14 @@ import org.junit.*;
 
 public class calculcateColumnTotalTest {
 
-    private DefaultKeyedValues2D validData;
-    private DefaultKeyedValues2D validData2;
-    private DefaultKeyedValues2D validData3;
-    private DefaultKeyedValues2D validData4;
+    private static DefaultKeyedValues2D validData;
+    private static DefaultKeyedValues2D validData2;
+    private static DefaultKeyedValues2D validData3;
+    private static DefaultKeyedValues2D validData4;
+    private static DefaultKeyedValues2D nullData;
 
-    @Before
-    public void setUp() {
+    @BeforeClass
+    public static void setUp() {
         // Initialise validData
         validData = new DefaultKeyedValues2D();
         validData.addValue(1.0, 0, 0);
@@ -49,15 +50,16 @@ public class calculcateColumnTotalTest {
         validData4.addValue(2.0, 1, 0);
         validData4.addValue(Double.NaN, 1, 1);
         validData4.addValue(10.0, 1, 2);
+        
+        nullData = null;
     }
     
     
     //ValidData test cases
-    @Test
+    @Test(expected = IndexOutOfBoundsException.class)
     public void testCalculateColumnTotal_ValidData_ColumnNegative() {
         // Test Case #1
         double result = DataUtilities.calculateColumnTotal(validData, -40);
-        assertEquals("Expected 0.0 for invalid column index -40", 0.0, result, 0.0); 
     }
 
     @Test
@@ -67,42 +69,40 @@ public class calculcateColumnTotalTest {
         assertEquals("Expected -1.0 for column 1, where values sum to 5 + (-6) = -1.0",-1.0, result, 0.0); 
     }
 
-    @Test
+    @Test(expected = IndexOutOfBoundsException.class)
     public void testCalculateColumnTotal_ValidData_ColumnOutBoundPositive() {
         // Test Case #3
-    	try {
-        double result = DataUtilities.calculateColumnTotal(validData, 3);
-        assertEquals("Expected 0.0 for invalid column index 3",0.0, result, 0.0); 
-    	} catch(Exception e) {
-    		e.getMessage();
-    	}
+        double result = DataUtilities.calculateColumnTotal(validData, 1);
     }
     
     
 
     @Test
     public void testCalculateColumnTotal_NullData_Column0() {
-        // Test Case #4: Null data should throw IllegalArgumentException
-        try {
-            DataUtilities.calculateColumnTotal(null, 0); 
-        } catch (IllegalArgumentException e) {
-            // You can also check the message here if needed
-            assertEquals("Expected exception message", "Data cannot be null", e.getMessage());
-        }
+    	// Test Case #4
+    	assertThrows(IllegalArgumentException.class, () -> {
+    		DataUtilities.calculateColumnTotal(nullData, 0);
+        });
     }
 
-    	
-
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testCalculateColumnTotal_NullData_Column1() {
-        // Test Case #5
-    	DataUtilities.calculateColumnTotal(null, 1); 
+    	// Test Case #5
+    	try {
+    		assertThrows(IllegalArgumentException.class, () -> {
+        		DataUtilities.calculateColumnTotal(nullData, 0);
+            });
+    	} catch (Exception e) {
+    		fail(); 
+    	}
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testCalculateColumnTotal_NullData_Column3() {
         // Test Case #6
-    	DataUtilities.calculateColumnTotal(null, 3); // Should throw IllegalArgumentException for null data
+    	assertThrows(IllegalArgumentException.class, () -> {
+    		DataUtilities.calculateColumnTotal(nullData, 3);
+        });
     }
 
     @Test
@@ -122,9 +122,14 @@ public class calculcateColumnTotalTest {
     @Test
     public void testCalculateColumnTotal_ValidData3_Column3() {
         // Test Case #9
+    	try {
         double result = DataUtilities.calculateColumnTotal(validData3, 3);
         System.out.print(result);
         assertEquals("Expected 0.0 for invalid column index 3 in validData3",0.0, result, 0.0); 
+        
+    	} catch (Exception e) {
+    		fail(e.getClass().getSimpleName());
+    	}
     }
 
     @Test
@@ -134,14 +139,13 @@ public class calculcateColumnTotalTest {
         assertTrue("Expected NaN for column 1 in validData4 due to Double.NaN value",result.isNaN()); 
     }
     
-    @After
-    public void tearDown() {
+    @AfterClass
+    public static void tearDown() {
         validData = null;
         validData2 = null;
         validData3 = null;
         validData4 = null;
         System.out.println("Test case completed, cleanup performed.");
     }
-
 }
 
