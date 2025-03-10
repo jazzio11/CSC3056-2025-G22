@@ -42,7 +42,7 @@ public class rangeTest {
 	public void testCombineTwoValidInputs() {
 		Range range1 = new Range(1,10);
 		Range range2 = new Range(11,20);
-		Range result = Range.combine(range2, range1);
+		Range result = Range.combine(range1, range2);
 		assertEquals(new Range(1,20), result);
 	}
 	
